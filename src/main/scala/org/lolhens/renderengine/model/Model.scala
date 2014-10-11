@@ -1,7 +1,7 @@
 package org.lolhens.renderengine.model
 
 import org.lolhens.renderengine.buffer.RenderBuffer
-import org.lolhens.renderengine.{NullAACube, NullVector3f, Vector3f}
+import org.lolhens.renderengine.{NullCube, NullVector3f, Vector3f}
 
 import scala.collection.mutable
 
@@ -23,7 +23,7 @@ class Model {
   private val parents = mutable.MutableList[Model]()
   private val children = mutable.MutableList[Model]()
 
-  var bounds = NullAACube
+  var bounds = NullCube
 
   def +=(model: Model): Unit = {
     dirty = true
@@ -35,9 +35,13 @@ class Model {
     dirty = false
 
     bounds = null
-    children.foreach((child: Model) => if (bounds == null) bounds = child.bounds else bounds.contain(child.bounds))
+    children.foreach((child: Model) => {
+      if (child.dirty) update
+      if (bounds == null) bounds = child.bounds else bounds.contain(child.bounds)
+      // collect the children's buffers
+    })
 
-    // collect the children's buffers
+    buffer.update
   }
 
   def render(translation: Vector3f = NullVector3f, rotation: Vector3f = NullVector3f, rotationOrigin: Vector3f = NullVector3f): Unit = {
