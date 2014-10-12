@@ -101,7 +101,7 @@ class ManagedBuffer(buffer: ByteBuffer) {
     true
   }
 
-  // def defrag() = {}
+  def defrag() = ???
 }
 
 object ManagedBuffer {

@@ -7,9 +7,6 @@ import javax.swing.SwingUtilities
  */
 object Main {
   def main(args: Array[String]) = SwingUtilities.invokeLater(new Runnable() {
-    override def run() = {
-      val window = new Window
-      window.setVisible(true)
-    }
-  });
+    override def run() = new Window().setVisible(true)
+  })
 }

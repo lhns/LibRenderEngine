@@ -1,5 +1,7 @@
 package org.lolhens.renderengine.test
 
+import java.awt.BorderLayout
+import java.awt.event.{WindowAdapter, WindowEvent}
 import javax.media.opengl.awt.GLCanvas
 import javax.swing.JFrame
 
@@ -8,22 +10,13 @@ import javax.swing.JFrame
  */
 class Window extends JFrame {
   val canvas = new GLCanvas()
-  getContentPane().add(canvas)
 
-  /*val view = new BeispielszeneView();
-  canvas.addGLEventListener(view);
+  addWindowListener(new WindowAdapter() {
+    override def windowClosing(event: WindowEvent) = System.exit(0)
+  })
 
-  setSize(500,500);
-  setTitle("CAV-Projekt: JOGL - Beispielszene");
-  setResizable(false);
+  setSize(500, 500)
+  setTitle("TEST WINDOW")
 
-  getContentPane().add(canvas,BorderLayout.CENTER);
-
-  addWindowListener(new WindowAdapter()
-  {
-    public void windowClosing(WindowEvent e)
-    {
-      System.exit(0);
-    }
-  });*/
+  getContentPane().add(canvas, BorderLayout.CENTER)
 }
