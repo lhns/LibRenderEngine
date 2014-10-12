@@ -33,8 +33,5 @@ build/
 #Git
 .cache
 
-#Submodules
-libs/eventManager/
-
 #Minecraft
 run/
