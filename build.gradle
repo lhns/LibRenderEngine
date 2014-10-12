@@ -1,6 +1,7 @@
 apply plugin: 'java'
 apply plugin: 'scala'
 apply plugin: 'idea'
+apply plugin: 'eclipse'
 
 ext.configFile = file "build.properties"
 configFile.withReader {
