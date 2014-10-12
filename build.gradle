@@ -3,8 +3,7 @@ apply plugin: 'scala'
 apply plugin: 'idea'
 apply plugin: 'eclipse'
 
-ext.configFile = file "build.properties"
-configFile.withReader {
+file("build.properties").withReader {
     def prop = new Properties()
     prop.load it
     project.ext.config = new ConfigSlurper().parse prop
@@ -21,6 +20,16 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: config.junit_version
 
     compile "org.jogamp.jogl:jogl-all:$config.jogamp_version"
-    compile "org.jogamp.jogl:jogl-all:$config.jogamp_version:natives-windows-i586"
-    compile "org.jogamp.jogl:jogl-all:$config.jogamp_version:natives-linux-amd64"
+    runtime "org.jogamp.jogl:jogl-all:$config.jogamp_version:natives-linux-i586",
+            "org.jogamp.jogl:jogl-all:$config.jogamp_version:natives-linux-amd64",
+            "org.jogamp.jogl:jogl-all:$config.jogamp_version:natives-windows-i586",
+            "org.jogamp.jogl:jogl-all:$config.jogamp_version:natives-windows-amd64",
+            "org.jogamp.jogl:jogl-all:$config.jogamp_version:natives-macosx-universal"
+
+    compile "org.jogamp.gluegen:gluegen-rt:$config.jogamp_version"
+    runtime "org.jogamp.gluegen:gluegen-rt:$config.jogamp_version:natives-linux-i586",
+            "org.jogamp.gluegen:gluegen-rt:$config.jogamp_version:natives-linux-amd64",
+            "org.jogamp.gluegen:gluegen-rt:$config.jogamp_version:natives-windows-i586",
+            "org.jogamp.gluegen:gluegen-rt:$config.jogamp_version:natives-windows-amd64",
+            "org.jogamp.gluegen:gluegen-rt:$config.jogamp_version:natives-macosx-universal"
 }

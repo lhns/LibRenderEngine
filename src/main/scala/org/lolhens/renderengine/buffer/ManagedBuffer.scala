@@ -16,26 +16,26 @@ class ManagedBuffer(buffer: ByteBuffer) {
   private val mapped = Map[Any, Region]()
   private val empty = new LinkedList[Region]()
 
-  empty += new Region(0, buffer.capacity())
+  empty.add(new Region(0, buffer.capacity()))
 
   private def availableRegion(length: Int): Region = {
-    if (empty.size() == 0 || length > empty(empty.length - 1).length) return null
+    if (empty.size() == 0 || length > empty.get(empty.length - 1).length) return null
     var startIndex = 0
     var endIndex = empty.length - 1
     var midIndex = 0
     while (endIndex != startIndex) {
       midIndex = (startIndex + endIndex) / 2
-      if (length > empty(midIndex).length) startIndex = midIndex + 1
+      if (length > empty.get(midIndex).length) startIndex = midIndex + 1
       else endIndex = midIndex
     }
-    empty(startIndex)
+    empty.get(startIndex)
   }
 
   private def addEmptyRegion(region: Region): Unit = {
     val length = region.length
-    if (length < empty(0).length) {
+    if (length < empty.get(0).length) {
       empty.add(0, region)
-    } else if (length > empty(empty.length - 1).length) {
+    } else if (length > empty.get(empty.length - 1).length) {
       empty.add(region)
     } else {
       var startIndex = 0
@@ -43,7 +43,7 @@ class ManagedBuffer(buffer: ByteBuffer) {
       var midIndex = 0
       while (endIndex != startIndex) {
         midIndex = (startIndex + endIndex) / 2
-        if (length > empty(midIndex).length) startIndex = midIndex + 1
+        if (length > empty.get(midIndex).length) startIndex = midIndex + 1
         else endIndex = midIndex
       }
       empty.add(startIndex, region)
@@ -106,6 +106,6 @@ class ManagedBuffer(buffer: ByteBuffer) {
 
 object ManagedBuffer {
 
-  case class Region(val offset: Int, val length: Int) {}
+  case class Region(offset: Int, length: Int) {}
 
 }
