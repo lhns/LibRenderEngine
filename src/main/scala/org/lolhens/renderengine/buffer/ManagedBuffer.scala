@@ -18,7 +18,10 @@ class ManagedBuffer(buffer: ByteBuffer) {
 
   empty += new Region(0, buffer.capacity())
 
-  def +=(key: Any, bytes: Array[Byte]): Boolean = {
+  def +=(kv: (Any, Array[Byte])): Boolean = {
+    val key = kv._1
+    val bytes = kv._2
+
     if (mapped contains key) this -= key
 
     val region = empty.getSuitableRegion(bytes.length)
@@ -47,6 +50,8 @@ class ManagedBuffer(buffer: ByteBuffer) {
 
     true
   }
+
+  def maxCapacity: Int = buffer.capacity()
 }
 
 object ManagedBuffer {

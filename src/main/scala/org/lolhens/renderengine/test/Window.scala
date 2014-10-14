@@ -2,11 +2,11 @@ package org.lolhens.renderengine.test
 
 import java.awt.BorderLayout
 import java.awt.event.{WindowAdapter, WindowEvent}
-import java.nio.{ByteOrder, ByteBuffer}
+import java.nio.{ByteBuffer, ByteOrder}
 import java.util.Random
 import javax.media.opengl._
 import javax.media.opengl.awt.GLCanvas
-import javax.media.opengl.fixedfunc.{GLPointerFunc, GLLightingFunc, GLMatrixFunc}
+import javax.media.opengl.fixedfunc.{GLLightingFunc, GLMatrixFunc, GLPointerFunc}
 import javax.media.opengl.glu.GLU
 import javax.swing.JFrame
 
@@ -48,7 +48,7 @@ class Window extends JFrame with GLEventListener {
     val vboId = vboIds(0)
     gl.glBindBuffer(GL.GL_ARRAY_BUFFER, vboId)
 
-println(vboId)
+    println(vboId)
 
     val byteBuffer = ByteBuffer.allocateDirect(3 * 3 * 4).order(ByteOrder.nativeOrder())
     byteBuffer.putFloat(0.0f)
@@ -65,27 +65,27 @@ println(vboId)
     gl.glBufferData(GL.GL_ARRAY_BUFFER, 3 * 3 * 4, byteBuffer, GL.GL_DYNAMIC_DRAW)
     //gl.glBufferSubData(GL.GL_ARRAY_BUFFER, 0, 3 * 3 * 4, byteBuffer)
     //while (true) {
-      gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT)
-      gl.glLoadIdentity()
-      gl.glTranslatef(-1.5f, 0.0f, -6.0f)
-      /*gl.glBegin(GL.GL_TRIANGLES)
-      gl.glVertex3f(0.0f, 1.0f, 0.0f)
-      gl.glVertex3f(-1.0f, -1.0f, 0.0f)
-      gl.glVertex3f(1.0f, -1.0f, 0.0f)
-      gl.glEnd()*/
+    gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT)
+    gl.glLoadIdentity()
+    gl.glTranslatef(-1.5f, 0.0f, -6.0f)
+    /*gl.glBegin(GL.GL_TRIANGLES)
+    gl.glVertex3f(0.0f, 1.0f, 0.0f)
+    gl.glVertex3f(-1.0f, -1.0f, 0.0f)
+    gl.glVertex3f(1.0f, -1.0f, 0.0f)
+    gl.glEnd()*/
     //gl.glBindBuffer(GL.GL_ARRAY_BUFFER, vboId)
-    gl.glVertexPointer(3, GL.GL_FLOAT, 4*3, 0)
-      gl.glDrawArrays(GL.GL_TRIANGLES, 0, 3);
+    gl.glVertexPointer(3, GL.GL_FLOAT, 4 * 3, 0)
+    gl.glDrawArrays(GL.GL_TRIANGLES, 0, 3);
     gl.glBindBuffer(GL.GL_ARRAY_BUFFER, 0)
-      gl.glTranslatef(3.0f, 0.0f, 0.0f)
-      gl.glBegin(GL2GL3.GL_QUADS)
-      gl.glVertex3f(-1.0f, 1.0f, new Random().nextFloat())
-      gl.glVertex3f(1.0f, 1.0f, 0.0f)
-      gl.glVertex3f(1.0f, -1.0f, 0.0f)
-      gl.glVertex3f(-1.0f, -1.0f, 0.0f)
-      gl.glEnd()
-      gl.glFlush()
-      //drawable.swapBuffers()
+    gl.glTranslatef(3.0f, 0.0f, 0.0f)
+    gl.glBegin(GL2GL3.GL_QUADS)
+    gl.glVertex3f(-1.0f, 1.0f, new Random().nextFloat())
+    gl.glVertex3f(1.0f, 1.0f, 0.0f)
+    gl.glVertex3f(1.0f, -1.0f, 0.0f)
+    gl.glVertex3f(-1.0f, -1.0f, 0.0f)
+    gl.glEnd()
+    gl.glFlush()
+    //drawable.swapBuffers()
     //}
   }
 
