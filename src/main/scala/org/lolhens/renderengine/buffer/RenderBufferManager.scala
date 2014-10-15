@@ -7,7 +7,7 @@ import scala.collection.mutable
 /**
  * Created by LolHens on 12.10.2014.
  */
-class BufferManager(createBuffer: () => ByteBuffer, updateBuffer: (ManagedBuffer) => Unit, drawBuffer: (ManagedBuffer) => Unit) {
+class RenderBufferManager(createBuffer: () => ByteBuffer, updateBuffer: (ManagedBuffer) => Unit, drawBuffer: (ManagedBuffer) => Unit) {
   val buffers = mutable.MutableList[ManagedBuffer]()
 
   private def getManagedBuffer(byteBuffer: ByteBuffer) = new ManagedBuffer(byteBuffer)

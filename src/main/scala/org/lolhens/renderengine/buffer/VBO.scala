@@ -1,6 +1,7 @@
 package org.lolhens.renderengine.buffer
 
 import java.nio.Buffer
+import javax.media.opengl.fixedfunc.GLPointerFunc
 import javax.media.opengl.{GL, GL2}
 
 /**
@@ -54,5 +55,11 @@ class VBO(gl: GL2, size: Int, setPointers: () => Int) {
     val stride = setPointers()
     gl.glDrawArrays(GL.GL_TRIANGLES, offset, length / stride)
     unbind
+  }
+}
+
+object VBO {
+  def enable(gl: GL2) = {
+    gl.glEnableClientState(GLPointerFunc.GL_VERTEX_ARRAY)
   }
 }

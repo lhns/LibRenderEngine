@@ -1,6 +1,5 @@
 package org.lolhens.renderengine.model
 
-import org.lolhens.renderengine.buffer.RenderBuffer
 import org.lolhens.renderengine.{NullCube, NullVector3f, Vector3f}
 
 import scala.collection.mutable
@@ -9,7 +8,7 @@ import scala.collection.mutable
  * Created by LolHens on 05.10.2014.
  */
 class Model {
-  private val buffer = new RenderBuffer()
+  //private val buffer = new RenderBuffer()
 
   private var _dirty = true
 
@@ -41,11 +40,11 @@ class Model {
       // collect the children's buffers
     })
 
-    buffer.update
+    //buffer.update
   }
 
   def render(translation: Vector3f = NullVector3f, rotation: Vector3f = NullVector3f, rotationOrigin: Vector3f = NullVector3f): Unit = {
     if (dirty) update
-    buffer.render(translation, rotation, rotationOrigin)
+    //buffer.render(translation, rotation, rotationOrigin)
   }
 }

@@ -6,11 +6,11 @@ import java.nio.{ByteBuffer, ByteOrder}
 import java.util.Random
 import javax.media.opengl._
 import javax.media.opengl.awt.GLCanvas
-import javax.media.opengl.fixedfunc.{GLLightingFunc, GLMatrixFunc, GLPointerFunc}
+import javax.media.opengl.fixedfunc.{GLLightingFunc, GLMatrixFunc}
 import javax.media.opengl.glu.GLU
 import javax.swing.JFrame
 
-import org.lolhens.renderengine.buffer.ManagedRenderBuffer
+import org.lolhens.renderengine.buffer.{ManagedRenderBuffer, VBO}
 
 /**
  * Created by LolHens on 12.10.2014.
@@ -30,41 +30,41 @@ class Window extends JFrame with GLEventListener {
 
   getContentPane().add(canvas, BorderLayout.CENTER)
 
+  var mb: ManagedRenderBuffer = null
+
   override def init(drawable: GLAutoDrawable): Unit = {
     val gl = drawable.getGL.getGL2
     drawable.setGL(new DebugGL2(gl))
 
-    gl.glEnableClientState(GLPointerFunc.GL_VERTEX_ARRAY)
+    VBO.enable(gl)
     gl.glEnable(GL.GL_DEPTH_TEST)
     gl.glDepthFunc(GL.GL_LEQUAL)
     gl.glShadeModel(GLLightingFunc.GL_SMOOTH)
     gl.glHint(GL2ES1.GL_PERSPECTIVE_CORRECTION_HINT, GL.GL_NICEST)
     gl.glClearColor(1f, 0f, 0f, 1f)
+
+    mb = new ManagedRenderBuffer(gl, 3 * 3 * 4 * 2)
   }
 
   override def display(drawable: GLAutoDrawable): Unit = {
 
     val gl = drawable.getGL.getGL2
-    val vboIds = new Array[Int](1)
-    //gl.glGenBuffers(1, vboIds, 0)
-    val vboId = vboIds(0)
 
-    //gl.glBindBuffer(GL.GL_ARRAY_BUFFER, vboId)
-
-
-    //val buffer = ByteBuffer.allocateDirect(3 * 3 * 4).order(ByteOrder.nativeOrder())
-    val bytebuffer = ByteBuffer.allocateDirect(3 * 3 * 4 * 2).order(ByteOrder.nativeOrder())
     val buffer = ByteBuffer.wrap(new Array[Byte](3 * 3 * 4)).order(ByteOrder.nativeOrder())
+    buffer.putFloat(0.0f)
+    buffer.putFloat(1.0f)
+    buffer.putFloat(0.0f)
+    buffer.putFloat(-1.0f)
+    buffer.putFloat(-1.0f)
+    buffer.putFloat(0.0f)
+    buffer.putFloat(1.0f)
+    buffer.putFloat(-1.0f)
+    buffer.putFloat(0.0f)
+    val bufData = new Array[Byte](3 * 3 * 4)
+    buffer.rewind()
+    buffer.get(bufData)
+
     val buffer2 = ByteBuffer.wrap(new Array[Byte](3 * 3 * 4)).order(ByteOrder.nativeOrder())
-    buffer.putFloat(0.0f)
-    buffer.putFloat(1.0f)
-    buffer.putFloat(0.0f)
-    buffer.putFloat(-1.0f)
-    buffer.putFloat(-1.0f)
-    buffer.putFloat(0.0f)
-    buffer.putFloat(1.0f)
-    buffer.putFloat(-1.0f)
-    buffer.putFloat(0.0f)
     val off = 1
     buffer2.putFloat(0.0f + off)
     buffer2.putFloat(1.0f + off)
@@ -75,36 +75,20 @@ class Window extends JFrame with GLEventListener {
     buffer2.putFloat(1.0f + off)
     buffer2.putFloat(-1.0f + off)
     buffer2.putFloat(0.0f + off)
-    buffer.rewind()
     buffer2.rewind()
-    val bufData = new Array[Byte](3 * 3 * 4)
-    buffer.get(bufData)
     val bufData2 = new Array[Byte](3 * 3 * 4)
     buffer2.get(bufData2)
-    //bytebuffer.put(bufData)
-    //buffer.rewind()
-    val mb = new ManagedRenderBuffer(gl, bytebuffer)
+
     mb += bufData -> bufData
     mb += bufData2 -> bufData2
     //mb -= bufData
-    //println(mb.mapped(buffer))
 
-    //gl.glBufferData(GL.GL_ARRAY_BUFFER, 3 * 3 * 4, byteBuffer, GL.GL_DYNAMIC_DRAW)
-    //gl.glBufferSubData(GL.GL_ARRAY_BUFFER, 0, 3 * 3 * 4, byteBuffer)
-    //while (true) {
     gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT)
     gl.glLoadIdentity()
     gl.glTranslatef(-1.5f, 0.0f, -6.0f)
-    /*gl.glBegin(GL.GL_TRIANGLES)
-    gl.glVertex3f(0.0f, 1.0f, 0.0f)
-    gl.glVertex3f(-1.0f, -1.0f, 0.0f)
-    gl.glVertex3f(1.0f, -1.0f, 0.0f)
-    gl.glEnd()*/
-    //gl.glBindBuffer(GL.GL_ARRAY_BUFFER, vboId)
-    //gl.glVertexPointer(3, GL.GL_FLOAT, 4 * 3, 0)
-    //gl.glDrawArrays(GL.GL_TRIANGLES, 0, 3);
-    //gl.glBindBuffer(GL.GL_ARRAY_BUFFER, 0)
+
     mb.render
+
     gl.glTranslatef(3.0f, 0.0f, 0.0f)
     gl.glBegin(GL2GL3.GL_QUADS)
     gl.glVertex3f(-1.0f, 1.0f, new Random().nextFloat())
@@ -113,8 +97,6 @@ class Window extends JFrame with GLEventListener {
     gl.glVertex3f(-1.0f, -1.0f, 0.0f)
     gl.glEnd()
     gl.glFlush()
-    //drawable.swapBuffers()
-    //}
   }
 
   override def reshape(drawable: GLAutoDrawable, x: Int, y: Int, width: Int, _height: Int): Unit = {
