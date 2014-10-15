@@ -2,7 +2,6 @@ package org.lolhens.renderengine.test
 
 import java.awt.BorderLayout
 import java.awt.event.{WindowAdapter, WindowEvent}
-import java.nio.{ByteBuffer, ByteOrder}
 import java.util.Random
 import javax.media.opengl._
 import javax.media.opengl.awt.GLCanvas
@@ -10,7 +9,8 @@ import javax.media.opengl.fixedfunc.{GLLightingFunc, GLMatrixFunc}
 import javax.media.opengl.glu.GLU
 import javax.swing.JFrame
 
-import org.lolhens.renderengine.buffer.{ManagedRenderBuffer, VBO}
+import org.lolhens.renderengine.buffer.{RenderBufferManager, VBO}
+import org.lolhens.renderengine.util.ToByteArray
 
 /**
  * Created by LolHens on 12.10.2014.
@@ -30,7 +30,7 @@ class Window extends JFrame with GLEventListener {
 
   getContentPane().add(canvas, BorderLayout.CENTER)
 
-  var mb: ManagedRenderBuffer = null
+  var mb: RenderBufferManager = null
 
   override def init(drawable: GLAutoDrawable): Unit = {
     val gl = drawable.getGL.getGL2
@@ -43,44 +43,18 @@ class Window extends JFrame with GLEventListener {
     gl.glHint(GL2ES1.GL_PERSPECTIVE_CORRECTION_HINT, GL.GL_NICEST)
     gl.glClearColor(1f, 0f, 0f, 1f)
 
-    mb = new ManagedRenderBuffer(gl, 3 * 3 * 4 * 2)
+    mb = new RenderBufferManager(gl)
   }
 
   override def display(drawable: GLAutoDrawable): Unit = {
 
     val gl = drawable.getGL.getGL2
 
-    val buffer = ByteBuffer.wrap(new Array[Byte](3 * 3 * 4)).order(ByteOrder.nativeOrder())
-    buffer.putFloat(0.0f)
-    buffer.putFloat(1.0f)
-    buffer.putFloat(0.0f)
-    buffer.putFloat(-1.0f)
-    buffer.putFloat(-1.0f)
-    buffer.putFloat(0.0f)
-    buffer.putFloat(1.0f)
-    buffer.putFloat(-1.0f)
-    buffer.putFloat(0.0f)
-    val bufData = new Array[Byte](3 * 3 * 4)
-    buffer.rewind()
-    buffer.get(bufData)
+    val off = (new Random().nextInt(1000) - 500).asInstanceOf[Float] / 100f
+    val data = Array(0.0f + off, 1.0f + off, 0.0f + off, -1.0f + off, -1.0f + off, 0.0f + off, 1.0f + off, -1.0f + off, 0.0f + off)
 
-    val buffer2 = ByteBuffer.wrap(new Array[Byte](3 * 3 * 4)).order(ByteOrder.nativeOrder())
-    val off = 1
-    buffer2.putFloat(0.0f + off)
-    buffer2.putFloat(1.0f + off)
-    buffer2.putFloat(0.0f + off)
-    buffer2.putFloat(-1.0f + off)
-    buffer2.putFloat(-1.0f + off)
-    buffer2.putFloat(0.0f + off)
-    buffer2.putFloat(1.0f + off)
-    buffer2.putFloat(-1.0f + off)
-    buffer2.putFloat(0.0f + off)
-    buffer2.rewind()
-    val bufData2 = new Array[Byte](3 * 3 * 4)
-    buffer2.get(bufData2)
-
-    mb += bufData -> bufData
-    mb += bufData2 -> bufData2
+    //mb += bufData -> bufData
+    mb += data -> ToByteArray(data)
     //mb -= bufData
 
     gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT)

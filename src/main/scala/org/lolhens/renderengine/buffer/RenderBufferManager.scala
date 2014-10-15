@@ -1,25 +1,22 @@
 package org.lolhens.renderengine.buffer
 
-import java.nio.ByteBuffer
+import javax.media.opengl.GL2
 
 import scala.collection.mutable
 
 /**
  * Created by LolHens on 12.10.2014.
  */
-class RenderBufferManager(createBuffer: () => ByteBuffer, updateBuffer: (ManagedBuffer) => Unit, drawBuffer: (ManagedBuffer) => Unit) {
-  val buffers = mutable.MutableList[ManagedBuffer]()
-
-  private def getManagedBuffer(byteBuffer: ByteBuffer) = new ManagedBuffer(byteBuffer)
+class RenderBufferManager(gl: GL2) {
+  val buffers = mutable.MutableList[ManagedRenderBuffer]()
+  val bufferSize = 4 * 3 * 3 * 1000
 
   def +=(kv: (Any, Array[Byte])): Boolean = {
-    var possible = false
     for (buffer <- buffers) {
       if (buffer += kv) return true
-      if (kv._2.length < buffer.bufferRegion.length) possible = true
+      else if (kv._2.length > buffer.bufferRegion.length) return false
     }
-    if (!possible) return false
-    val newBuffer = getManagedBuffer(createBuffer())
+    val newBuffer = new ManagedRenderBuffer(gl, bufferSize)
     buffers += newBuffer
     newBuffer += kv
   }
@@ -28,6 +25,8 @@ class RenderBufferManager(createBuffer: () => ByteBuffer, updateBuffer: (Managed
     for (buffer <- buffers) if (buffer -= key) return true
     false
   }
+
+  def render = buffers.foreach(_.render)
 
   def foreach(func: ManagedBuffer => Unit) = buffers.foreach(func)
 }
