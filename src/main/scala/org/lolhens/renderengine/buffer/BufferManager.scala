@@ -10,14 +10,16 @@ import scala.collection.mutable
 class BufferManager(createBuffer: () => ByteBuffer, updateBuffer: (ManagedBuffer) => Unit, drawBuffer: (ManagedBuffer) => Unit) {
   val buffers = mutable.MutableList[ManagedBuffer]()
 
+  private def getManagedBuffer(byteBuffer: ByteBuffer) = new ManagedBuffer(byteBuffer)
+
   def +=(kv: (Any, Array[Byte])): Boolean = {
     var possible = false
     for (buffer <- buffers) {
       if (buffer += kv) return true
-      if (kv._2.length < buffer.maxCapacity) possible = true
+      if (kv._2.length < buffer.bufferRegion.length) possible = true
     }
     if (!possible) return false
-    val newBuffer = new ManagedBuffer(createBuffer())
+    val newBuffer = getManagedBuffer(createBuffer())
     buffers += newBuffer
     newBuffer += kv
   }
@@ -27,7 +29,5 @@ class BufferManager(createBuffer: () => ByteBuffer, updateBuffer: (ManagedBuffer
     false
   }
 
-  def update = for (buffer <- buffers) updateBuffer(buffer)
-
-  def draw = for (buffer <- buffers) drawBuffer(buffer)
+  def foreach(func: ManagedBuffer => Unit) = buffers.foreach(func)
 }

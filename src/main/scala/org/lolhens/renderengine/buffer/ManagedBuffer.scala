@@ -1,9 +1,10 @@
 package org.lolhens.renderengine.buffer
 
-import java.nio.ByteBuffer
+import java.nio.{ByteBuffer, ByteOrder}
 import java.util
 
 import org.lolhens.renderengine.buffer.ManagedBuffer._
+import org.lolhens.renderengine.util.NullByteArray
 
 import scala.collection.JavaConversions._
 import scala.collection.mutable
@@ -11,12 +12,16 @@ import scala.collection.mutable
 /**
  * Created by LolHens on 05.10.2014.
  */
-class ManagedBuffer(buffer: ByteBuffer) {
+class ManagedBuffer(val buffer: ByteBuffer) {
+  def this(size: Int) = this(ByteBuffer.allocateDirect(size).order(ByteOrder.nativeOrder()))
+
   private val mapped = mutable.Map[Any, Region]()
   private val empty = new RegionList()
   private val dirty = new RegionList()
+  val bufferRegion = new Region(0, buffer.capacity())
 
-  empty += new Region(0, buffer.capacity())
+  empty += bufferRegion
+  dirty += bufferRegion
 
   def +=(kv: (Any, Array[Byte])): Boolean = {
     val key = kv._1
@@ -29,7 +34,8 @@ class ManagedBuffer(buffer: ByteBuffer) {
 
     val bytesRegion = new Region(region.offset, bytes.length)
 
-    buffer.put(bytes, bytesRegion.offset, bytesRegion.length)
+    buffer.position(bytesRegion.offset)
+    buffer.put(bytes, 0, bytesRegion.length)
 
     mapped += key -> bytesRegion
     empty -= bytesRegion
@@ -42,7 +48,8 @@ class ManagedBuffer(buffer: ByteBuffer) {
     val region = mapped(key)
     if (region == null) return false
 
-    for (i <- region.offset until region.end) buffer.put(i, 0)
+    buffer.position(region.offset)
+    buffer.put(NullByteArray(region.length), 0, region.length)
 
     mapped.remove(key)
     empty += region
@@ -51,7 +58,10 @@ class ManagedBuffer(buffer: ByteBuffer) {
     true
   }
 
-  def maxCapacity: Int = buffer.capacity()
+  def foreach(func: Region => Unit) = {
+    dirty.foreach(func)
+    dirty.remove
+  }
 }
 
 object ManagedBuffer {
@@ -153,6 +163,17 @@ object ManagedBuffer {
       }
       suitable
     }
+
+    private var foreachIterator: util.Iterator[Region] = null
+
+    def foreach(func: Region => Unit) = {
+      val iterator = list.iterator
+      foreachIterator = iterator
+      while (iterator.hasNext) func(iterator.next)
+      foreachIterator = null
+    }
+
+    private[ManagedBuffer] def remove = if (foreachIterator != null) foreachIterator.remove
 
     override def toString = {
       var string = ""
