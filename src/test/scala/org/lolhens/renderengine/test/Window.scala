@@ -5,14 +5,14 @@ import java.awt.event.{WindowAdapter, WindowEvent}
 import javax.media.opengl.awt.GLCanvas
 import javax.swing.JFrame
 
-import org.lolhens.renderengine.Scene
+import org.lolhens.renderengine.scene.DefaultScene
 
 /**
  * Created by LolHens on 12.10.2014.
  */
 class Window extends JFrame {
   val canvas = new GLCanvas()
-  val scene = new Scene(canvas)
+  val scene = new DefaultScene(canvas)
 
   addWindowListener(new WindowAdapter() {
     override def windowClosing(event: WindowEvent) = System.exit(0)
