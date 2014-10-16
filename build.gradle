@@ -16,20 +16,19 @@ repositories {
 }
 
 dependencies {
-    compile "org.scala-lang:scala-library:$config.scala_version"
-    testCompile group: 'junit', name: 'junit', version: config.junit_version
-
-    compile "org.jogamp.jogl:jogl-all:$config.jogamp_version"
-    runtime "org.jogamp.jogl:jogl-all:$config.jogamp_version:natives-linux-i586",
-            "org.jogamp.jogl:jogl-all:$config.jogamp_version:natives-linux-amd64",
-            "org.jogamp.jogl:jogl-all:$config.jogamp_version:natives-windows-i586",
-            "org.jogamp.jogl:jogl-all:$config.jogamp_version:natives-windows-amd64",
-            "org.jogamp.jogl:jogl-all:$config.jogamp_version:natives-macosx-universal"
-
-    compile "org.jogamp.gluegen:gluegen-rt:$config.jogamp_version"
-    runtime "org.jogamp.gluegen:gluegen-rt:$config.jogamp_version:natives-linux-i586",
-            "org.jogamp.gluegen:gluegen-rt:$config.jogamp_version:natives-linux-amd64",
-            "org.jogamp.gluegen:gluegen-rt:$config.jogamp_version:natives-windows-i586",
-            "org.jogamp.gluegen:gluegen-rt:$config.jogamp_version:natives-windows-amd64",
-            "org.jogamp.gluegen:gluegen-rt:$config.jogamp_version:natives-macosx-universal"
+    compile([group: 'org.scala-lang', name: 'scala-library', version: config.version_scala],
+            [group: 'com.typesafe.akka', name: 'akka-actor_2.11', version: config.version_akka],
+            [group: 'org.jogamp.jogl', name: 'jogl-all', version: config.version_jogamp],
+            [group: 'org.jogamp.gluegen', name: 'gluegen-rt', version: config.version_jogamp])
+    runtime([group: 'org.jogamp.jogl', name: 'jogl-all', version: config.version_jogamp, classifier: 'natives-linux-i586'],
+            [group: 'org.jogamp.jogl', name: 'jogl-all', version: config.version_jogamp, classifier: 'natives-linux-amd64'],
+            [group: 'org.jogamp.jogl', name: 'jogl-all', version: config.version_jogamp, classifier: 'natives-windows-i586'],
+            [group: 'org.jogamp.jogl', name: 'jogl-all', version: config.version_jogamp, classifier: 'natives-windows-amd64'],
+            [group: 'org.jogamp.jogl', name: 'jogl-all', version: config.version_jogamp, classifier: 'natives-macosx-universal'],
+            [group: 'org.jogamp.gluegen', name: 'gluegen-rt', version: config.version_jogamp, classifier: 'natives-linux-i586'],
+            [group: 'org.jogamp.gluegen', name: 'gluegen-rt', version: config.version_jogamp, classifier: 'natives-linux-amd64'],
+            [group: 'org.jogamp.gluegen', name: 'gluegen-rt', version: config.version_jogamp, classifier: 'natives-windows-i586'],
+            [group: 'org.jogamp.gluegen', name: 'gluegen-rt', version: config.version_jogamp, classifier: 'natives-windows-amd64'],
+            [group: 'org.jogamp.gluegen', name: 'gluegen-rt', version: config.version_jogamp, classifier: 'natives-macosx-universal'])
+    testCompile([group: 'junit', name: 'junit', version: config.version_junit])
 }

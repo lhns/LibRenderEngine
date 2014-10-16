@@ -7,7 +7,7 @@ import javax.media.opengl.{GL, GL2}
 /**
  * Created by LolHens on 15.10.2014.
  */
-class VBO(gl: GL2, size: Int, setPointers: () => Int) {
+class VBO(gl: GL2, size: Int, setPointers: (GL2) => Int) {
   private var timesBound = 0
 
   val vboId = gen
@@ -52,7 +52,7 @@ class VBO(gl: GL2, size: Int, setPointers: () => Int) {
 
   def render(offset: Int, length: Int): Unit = {
     bind
-    val stride = setPointers()
+    val stride = setPointers(gl)
     gl.glDrawArrays(GL.GL_TRIANGLES, offset, length / stride)
     unbind
   }
