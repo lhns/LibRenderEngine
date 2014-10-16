@@ -1,6 +1,6 @@
 package org.lolhens.renderengine.model
 
-import scala.collection.mutable
+import java.util
 
 /**
  * Created by LolHens on 05.10.2014.
@@ -11,12 +11,14 @@ class Model {
   def dirty: Boolean = _dirty
 
   def dirty_=(value: Boolean): Unit = {
+    _dirty // TODO!!!!!!!
     _dirty = value
     if (value) parents.foreach(_.dirty = value)
   }
 
-  private val parents = mutable.MutableList[Model]()
-  private val children = mutable.MutableList[Model]()
+  private val parents = new util.ArrayList[Model]()
+  private val children = new util.ArrayList[Model]()
+  private val dirtyChildren = new util.LinkedList[Model]()
 
   var bounds = NullBoundingBox
 

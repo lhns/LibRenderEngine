@@ -5,6 +5,7 @@ import java.awt.event.{WindowAdapter, WindowEvent}
 import javax.media.opengl.awt.GLCanvas
 import javax.swing.JFrame
 
+import org.lolhens.renderengine.model.Model
 import org.lolhens.renderengine.scene.{DefaultSceneRenderer, Scene}
 
 /**
@@ -12,7 +13,8 @@ import org.lolhens.renderengine.scene.{DefaultSceneRenderer, Scene}
  */
 class Window extends JFrame {
   val canvas = new GLCanvas()
-  val scene = new Scene[DefaultSceneRenderer](canvas)
+  val model = new Model()
+  val scene = new Scene[DefaultSceneRenderer](canvas, model)
 
   addWindowListener(new WindowAdapter() {
     override def windowClosing(event: WindowEvent) = System.exit(0)
