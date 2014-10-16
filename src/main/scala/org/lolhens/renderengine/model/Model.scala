@@ -1,18 +1,11 @@
 package org.lolhens.renderengine.model
 
-import javax.media.opengl.GL2
-
-import org.lolhens.renderengine.buffer.RenderBufferManager
-import org.lolhens.renderengine.{NullCube, NullVector3f, Vector3f}
-
 import scala.collection.mutable
 
 /**
  * Created by LolHens on 05.10.2014.
  */
 class Model {
-  private var renderBufferManager: RenderBufferManager = null
-
   private var _dirty = true
 
   def dirty: Boolean = _dirty
@@ -25,7 +18,7 @@ class Model {
   private val parents = mutable.MutableList[Model]()
   private val children = mutable.MutableList[Model]()
 
-  var bounds = NullCube
+  var bounds = NullBoundingBox
 
   def +=(model: Model): Unit = {
     dirty = true
@@ -44,11 +37,5 @@ class Model {
     })
 
     //buffer.update
-  }
-
-  def render(gl: GL2, translation: Vector3f = NullVector3f, rotation: Vector3f = NullVector3f, rotationOrigin: Vector3f = NullVector3f): Unit = {
-    if (renderBufferManager == null) renderBufferManager = new RenderBufferManager(gl)
-    if (dirty) update
-    //buffer.render(translation, rotation, rotationOrigin)
   }
 }

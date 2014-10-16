@@ -58,6 +58,8 @@ class ManagedBuffer(val buffer: ByteBuffer) {
     true
   }
 
+  def isEmpty: Boolean = empty.getFirstRegion == bufferRegion
+
   def foreach(func: Region => Unit) = {
     dirty.foreach(func)
     dirty.remove
@@ -174,6 +176,8 @@ object ManagedBuffer {
     }
 
     private[ManagedBuffer] def remove = if (foreachIterator != null) foreachIterator.remove
+
+    private[ManagedBuffer] def getFirstRegion = if (list.size > 0) list.getFirst else null
 
     override def toString = {
       var string = ""

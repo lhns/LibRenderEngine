@@ -56,10 +56,17 @@ class VBO(gl: GL2, size: Int, setPointers: (GL2) => Int) {
     gl.glDrawArrays(GL.GL_TRIANGLES, offset, length / stride)
     unbind
   }
+
+  def close = gl.glDeleteBuffers(1, Array[Int](vboId), 0)
 }
 
 object VBO {
+  private var enabled = false
+
   def enable(gl: GL2) = {
-    gl.glEnableClientState(GLPointerFunc.GL_VERTEX_ARRAY)
+    if (!enabled) {
+      gl.glEnableClientState(GLPointerFunc.GL_VERTEX_ARRAY)
+      enabled = true
+    }
   }
 }
