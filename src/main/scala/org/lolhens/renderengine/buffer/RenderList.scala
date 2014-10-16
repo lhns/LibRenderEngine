@@ -1,8 +1,8 @@
 package org.lolhens.renderengine.buffer
 
+import java.util
 import javax.media.opengl.GL2
 
-import scala.collection.mutable
 import scala.collection.mutable.ArrayBuffer
 
 /**
@@ -11,7 +11,7 @@ import scala.collection.mutable.ArrayBuffer
 class RenderList(gl: GL2, setPointers: (GL2) => Int) {
   var bufferSize = 4 * 3 * 3 * 1000
   private val buffers = ArrayBuffer[ManagedRenderBuffer]()
-  private val keys = mutable.Map[Any, ManagedRenderBuffer]()
+  private val keys = new util.HashMap[Any, ManagedRenderBuffer]()
 
   def +=(kv: (Any, Array[Byte])): Boolean = {
     for (buffer <- buffers) {
@@ -25,14 +25,14 @@ class RenderList(gl: GL2, setPointers: (GL2) => Int) {
 
   private def addToBuffer(kv: (Any, Array[Byte]), buffer: ManagedRenderBuffer): Boolean =
     if (buffer += kv) {
-      keys += kv._1 -> buffer
+      keys.put(kv._1, buffer)
       true
     } else false
 
   def -=(key: Any): Boolean = {
-    val buffer = keys(key)
+    val buffer = keys.get(key)
     if (buffer != null && (buffer -= key)) {
-      keys -= key
+      keys.remove(key)
       if (buffer.isEmpty) {
         buffers -= buffer
         buffer.close

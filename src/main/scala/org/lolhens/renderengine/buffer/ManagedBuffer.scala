@@ -6,8 +6,6 @@ import java.util
 import org.lolhens.renderengine.buffer.ManagedBuffer._
 import org.lolhens.renderengine.util.NullByteArray
 
-import scala.collection.JavaConversions._
-import scala.collection.mutable
 
 /**
  * Created by LolHens on 05.10.2014.
@@ -15,7 +13,7 @@ import scala.collection.mutable
 class ManagedBuffer(val buffer: ByteBuffer) {
   def this(size: Int) = this(ByteBuffer.allocateDirect(size).order(ByteOrder.nativeOrder()))
 
-  private val mapped = mutable.Map[Any, Region]()
+  private val mapped = new util.HashMap[Any, Region]()
   private val empty = new RegionList()
   private val dirty = new RegionList()
   val bufferRegion = new Region(0, buffer.capacity())
@@ -27,7 +25,7 @@ class ManagedBuffer(val buffer: ByteBuffer) {
     val key = kv._1
     val bytes = kv._2
 
-    if (mapped contains key) this -= key
+    if (mapped.containsKey(key)) this -= key
 
     val region = empty.getSuitableRegion(bytes.length)
     if (region == null) return false
@@ -37,7 +35,7 @@ class ManagedBuffer(val buffer: ByteBuffer) {
     buffer.position(bytesRegion.offset)
     buffer.put(bytes, 0, bytesRegion.length)
 
-    mapped += key -> bytesRegion
+    mapped.put(key, bytesRegion)
     empty -= bytesRegion
     dirty += bytesRegion
 
@@ -45,7 +43,7 @@ class ManagedBuffer(val buffer: ByteBuffer) {
   }
 
   def -=(key: Any): Boolean = {
-    val region = mapped(key)
+    val region = mapped.get(key)
     if (region == null) return false
 
     buffer.position(region.offset)
@@ -181,7 +179,11 @@ object ManagedBuffer {
 
     override def toString = {
       var string = ""
-      for (region <- list) string = if (string == "") region.toString else s"$string, $region"
+      val iterator = list.iterator()
+      while (iterator.hasNext) {
+        val region = iterator.next
+        string = if (string == "") region.toString else s"$string, $region"
+      }
       string
     }
   }

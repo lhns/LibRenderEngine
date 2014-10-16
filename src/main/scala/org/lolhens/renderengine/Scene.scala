@@ -65,6 +65,8 @@ class Scene(drawable: GLAutoDrawable) {
 
     //mb += bufData -> bufData
     renderList += data -> ToByteArray(data)
+    renderList += data -> ToByteArray(data)
+    renderList -= data -> ToByteArray(data)
 
     def render = {
       gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT)
