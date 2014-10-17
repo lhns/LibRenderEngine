@@ -14,7 +14,7 @@ import org.lolhens.renderengine.scene.{DefaultSceneRenderer, Scene}
 class Window extends JFrame {
   val canvas = new GLCanvas()
   val model = new Model()
-  val scene = new Scene[DefaultSceneRenderer](canvas, model)
+  val scene = new Scene[DefaultSceneRenderer](canvas)
 
   addWindowListener(new WindowAdapter() {
     override def windowClosing(event: WindowEvent) = System.exit(0)

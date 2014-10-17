@@ -3,7 +3,9 @@ package org.lolhens.renderengine.buffer
 import java.util
 import javax.media.opengl.GL2
 
-import org.lolhens.renderengine.model.Model
+import org.lolhens.renderengine.model.{Face, Model}
+import org.lolhens.renderengine.util.JavaForeach._
+import org.lolhens.renderengine.util.ToByteArray
 
 import scala.collection.mutable.ArrayBuffer
 
@@ -52,6 +54,21 @@ class RenderList(gl: GL2, setPointers: (GL2) => Int) {
   def foreach(func: ManagedBuffer => Unit) = buffers.foreach(func)
 
   def put(model: Model): Unit = {
+    if (!model.removedChildren.isEmpty) model.removedChildren.foreach(removeAll(_))
+    model.removedChildren.clear()
+    if (!model.addedChildren.isEmpty) model.addedChildren.foreach(addAll(_))
+    model.addedChildren.clear()
+    if (!model.dirtyChildren.isEmpty) model.dirtyChildren.foreach(put(_))
+    model.dirtyChildren.clear()
+  }
 
+  private def addAll(model: Model): Unit = model match {
+    case face: Face => this += face -> ToByteArray(Array(face._1.x, face._1.y, face._1.y, face._1.y, face._1.y, face._1.y, face._1.y, face._1.y, face._1.y))
+    case model => model.foreach(addAll(_))
+  }
+
+  private def removeAll(model: Model): Unit = model match {
+    case face: Face => this -= face
+    case model => model.foreach(addAll(_))
   }
 }

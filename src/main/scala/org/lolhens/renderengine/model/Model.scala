@@ -2,42 +2,49 @@ package org.lolhens.renderengine.model
 
 import java.util
 
+import org.lolhens.renderengine.util.JavaForeach._
+
 /**
  * Created by LolHens on 05.10.2014.
  */
 class Model {
-  private var _dirty = true
-
-  def dirty: Boolean = _dirty
-
-  def dirty_=(value: Boolean): Unit = {
-    _dirty // TODO!!!!!!!
-    _dirty = value
-    if (value) parents.foreach(_.dirty = value)
-  }
-
   private val parents = new util.ArrayList[Model]()
   private val children = new util.ArrayList[Model]()
-  private val dirtyChildren = new util.LinkedList[Model]()
+  val dirtyChildren = new util.LinkedList[Model]()
+  val addedChildren = new util.LinkedList[Model]()
+  val removedChildren = new util.LinkedList[Model]()
 
   var bounds = NullBoundingBox
 
+  private def update(model: Model): Unit = {
+    dirtyChildren.add(model)
+    parents.foreach(_.update(this))
+  }
+
+  def dirty: Boolean = !dirtyChildren.isEmpty || !addedChildren.isEmpty || !removedChildren.isEmpty
+
   def +=(model: Model): Unit = {
-    dirty = true
-    children += model
-    model.parents += this
+    if (children.add(model)) {
+      model.parents.add(this)
+      addedChildren.add(model)
+      if (model.dirty) dirtyChildren.add(model)
+      parents.foreach(_.update(this))
+    }
   }
 
-  def update: Unit = {
-    dirty = false
-
-    bounds = null
-    children.foreach((child: Model) => {
-      if (child.dirty) update
-      if (bounds == null) bounds = child.bounds else bounds.contain(child.bounds)
-      // collect the children's buffers
-    })
-
-    //buffer.update
+  def -=(model: Model): Unit = {
+    if (children.remove(model)) {
+      model.parents.remove(this)
+      removedChildren.add(model)
+      if (model.dirty) dirtyChildren.add(model)
+      parents.foreach(_.update(this))
+    }
   }
+
+  def foreach(func: Model => Unit) = {
+    val iterator = children.iterator()
+    while (iterator.hasNext) func(iterator.next)
+  }
+
+  override def clone: Model = ???
 }

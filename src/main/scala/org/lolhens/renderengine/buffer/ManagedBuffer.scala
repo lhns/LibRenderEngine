@@ -25,7 +25,7 @@ class ManagedBuffer(val buffer: ByteBuffer) {
     val key = kv._1
     val bytes = kv._2
 
-    if (mapped.containsKey(key)) this -= key
+    if (mapped.containsKey(key)) if (ignoreDuplicates) return true else this -= key
 
     val region = empty.getSuitableRegion(bytes.length)
     if (region == null) return false
@@ -65,6 +65,7 @@ class ManagedBuffer(val buffer: ByteBuffer) {
 }
 
 object ManagedBuffer {
+  val ignoreDuplicates = true
 
   case class Region(offset: Int, length: Int) {
     def end = offset + length
