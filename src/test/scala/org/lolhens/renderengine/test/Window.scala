@@ -24,4 +24,13 @@ class Window extends JFrame {
   setTitle("TEST WINDOW")
 
   getContentPane().add(canvas, BorderLayout.CENTER)
+
+  /*
+  val off = 0
+  //(new Random().nextInt(1000) - 500).asInstanceOf[Float] / 100f
+  val data = Array(0.0f + off, 1.0f + off, 0.0f + off, -1.0f + off, -1.0f + off, 0.0f + off, 1.0f + off, -1.0f + off, 0.0f + off)
+
+  renderList += data -> ToByteArray(data)
+
+   */
 }

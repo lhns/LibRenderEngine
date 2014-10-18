@@ -1,6 +1,7 @@
 package org.lolhens.renderengine.buffer
 
 import java.util
+import java.util.Random
 import javax.media.opengl.GL2
 
 import org.lolhens.renderengine.model.{Face, Model}
@@ -63,7 +64,7 @@ class RenderList(gl: GL2, setPointers: (GL2) => Int) {
   }
 
   private def addAll(model: Model): Unit = model match {
-    case face: Face => this += face -> ToByteArray(Array(face._1.x, face._1.y, face._1.y, face._1.y, face._1.y, face._1.y, face._1.y, face._1.y, face._1.y))
+    case face: Face => this += new Random().nextFloat() -> ToByteArray(Array(face._1.x, face._1.y, face._1.y, face._1.y, face._1.y, face._1.y, face._1.y, face._1.y, face._1.y))
     case model => model.foreach(addAll(_))
   }
 

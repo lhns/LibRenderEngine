@@ -1,7 +1,6 @@
 package org.lolhens.renderengine.scene
 
 import java.lang.reflect.Modifier
-import java.util
 import javax.media.opengl._
 
 import com.jogamp.opengl.util.FPSAnimator
@@ -16,16 +15,10 @@ final class Scene[Renderer <: SceneRenderer : ClassTag](drawable: GLAutoDrawable
   drawable.addGLEventListener(SceneGLEventListener)
 
   private var sceneRenderer: SceneRenderer = null
-  private val modelList = new util.ArrayList[Model]()
+  val model = new Model()
   val animator = new FPSAnimator(drawable, 60)
 
   animator.start
-
-  def +=(model: Model): Boolean = modelList.add(model)
-
-  def -=(model: Model): Boolean = modelList.remove(model)
-
-  def contains(model: Model): Boolean = modelList.contains(model)
 
   object SceneGLEventListener extends GLEventListener {
     override def init(drawable: GLAutoDrawable): Unit = sceneRenderer = implicitly[ClassTag[Renderer]].runtimeClass match {
@@ -35,8 +28,7 @@ final class Scene[Renderer <: SceneRenderer : ClassTag](drawable: GLAutoDrawable
     }
 
     override def display(drawable: GLAutoDrawable): Unit = {
-      val iterator = modelList.iterator()
-      while (iterator.hasNext) sceneRenderer.renderList.put(iterator.next)
+      sceneRenderer.renderList.put(model)
       sceneRenderer.render
     }
 
