@@ -18,6 +18,7 @@ repositories {
 dependencies {
     compile([group: 'org.scala-lang', name: 'scala-library', version: config.version_scala],
             [group: 'com.typesafe.akka', name: 'akka-actor_2.11', version: config.version_akka],
+            [group: 'ar.com.hjg', name: 'pngj', version: config.version_pngj],
             [group: 'org.jogamp.jogl', name: 'jogl-all', version: config.version_jogamp],
             [group: 'org.jogamp.gluegen', name: 'gluegen-rt', version: config.version_jogamp])
     runtime([group: 'org.jogamp.jogl', name: 'jogl-all', version: config.version_jogamp, classifier: 'natives-linux-i586'],

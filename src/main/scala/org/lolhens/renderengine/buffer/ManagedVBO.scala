@@ -12,7 +12,7 @@ class ManagedVBO(gl: GL2, setPointers: (GL2) => Int, byteBuffer: ByteBuffer) ext
   val vbo = new VBO(gl, byteBuffer.capacity(), setPointers)
 
   def render = {
-    VBO.enable(gl)
+    VBO.setup(gl)
     vbo.bind
     vbo.put(this)
     vbo.render

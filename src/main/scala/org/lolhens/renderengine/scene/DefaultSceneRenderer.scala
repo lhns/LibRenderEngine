@@ -20,12 +20,15 @@ class DefaultSceneRenderer(drawable: GLAutoDrawable) extends SceneRenderer(drawa
   gl.glHint(GL2ES1.GL_PERSPECTIVE_CORRECTION_HINT, GL.GL_NICEST)
   gl.glClearColor(0, 0, 0, 1)
 
-  val texture = TextureIO.newTexture(getClass.getClassLoader.getResourceAsStream("icons/pear16_32.png"), true, ".png")
-  texture.setTexParameteri(gl, GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR)
+
+  val texture = TextureIO.newTexture(getClass.getClassLoader.getResourceAsStream("icons/pear16_32.png"), true, "png")
+  texture.setTexParameteri(gl, GL2ES3.GL_TEXTURE_MAX_LEVEL, 7)
+  texture.setTexParameteri(gl, GL.GL_TEXTURE_MIN_FILTER, GL.GL_NEAREST_MIPMAP_LINEAR)
   texture.setTexParameteri(gl, GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR)
   texture.setTexParameteri(gl, GL.GL_TEXTURE_WRAP_S, GL.GL_CLAMP_TO_EDGE)
   texture.setTexParameteri(gl, GL.GL_TEXTURE_WRAP_T, GL.GL_CLAMP_TO_EDGE)
 
+  texture.updateImage(gl, TextureIO.newTextureData(gl.getGLProfile, getClass.getClassLoader.getResourceAsStream("icons/pear16_32.png"), true, "png"))
 
   val off = 0
   val data = Array[Float](
@@ -45,7 +48,7 @@ class DefaultSceneRenderer(drawable: GLAutoDrawable) extends SceneRenderer(drawa
     gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT)
     gl.glLoadIdentity
     gl.glTranslatef(-0.5f, -0.5f, -3f)
-    rot += 0.2f
+    rot += 0.6f
     gl.glRotatef(rot, 1, 1, 0)
     renderList.render
   }

@@ -63,7 +63,7 @@ class VBO(gl: GL2, size: Int, setPointers: (GL2) => Int) {
 object VBO {
   private var enabled = false
 
-  def enable(gl: GL2) = {
+  def setup(gl: GL2) = {
     if (!enabled) {
       gl.glEnableClientState(GLPointerFunc.GL_VERTEX_ARRAY)
       gl.glEnableClientState(GLPointerFunc.GL_NORMAL_ARRAY)
