@@ -66,6 +66,9 @@ object VBO {
   def enable(gl: GL2) = {
     if (!enabled) {
       gl.glEnableClientState(GLPointerFunc.GL_VERTEX_ARRAY)
+      gl.glEnableClientState(GLPointerFunc.GL_NORMAL_ARRAY)
+      gl.glEnableClientState(GLPointerFunc.GL_COLOR_ARRAY)
+      gl.glEnableClientState(GLPointerFunc.GL_TEXTURE_COORD_ARRAY)
       enabled = true
     }
   }
