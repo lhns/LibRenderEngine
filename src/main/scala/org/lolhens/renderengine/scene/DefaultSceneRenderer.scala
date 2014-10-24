@@ -3,6 +3,7 @@ package org.lolhens.renderengine.scene
 import javax.media.opengl._
 import javax.media.opengl.fixedfunc.{GLLightingFunc, GLMatrixFunc}
 
+import ar.com.hjg.pngj.{ImageLineInt, PngReaderInt}
 import com.jogamp.opengl.util.texture.TextureIO
 import org.lolhens.renderengine.util.ToByteArray
 
@@ -29,6 +30,10 @@ class DefaultSceneRenderer(drawable: GLAutoDrawable) extends SceneRenderer(drawa
   texture.setTexParameteri(gl, GL.GL_TEXTURE_WRAP_T, GL.GL_CLAMP_TO_EDGE)
 
   texture.updateImage(gl, TextureIO.newTextureData(gl.getGLProfile, getClass.getClassLoader.getResourceAsStream("icons/pear16_32.png"), true, "png"))
+
+  val reader = new PngReaderInt(getClass.getClassLoader.getResourceAsStream("icons/pear16_32.png"))
+  val imgLineSet = reader.readRows()
+  for (line <- 0 until imgLineSet.size()) imgLineSet.getImageLine(line).asInstanceOf[ImageLineInt].getScanline
 
   val off = 0
   val data = Array[Float](
