@@ -16,7 +16,7 @@ class ManagedBuffer(val buffer: ByteBuffer) {
   private val mapped = new util.HashMap[Any, Region]()
   private val empty = new RegionList()
   private val dirty = new RegionList()
-  val bufferRegion = new Region(0, buffer.capacity())
+  val bufferRegion = new Region(this, 0, buffer.capacity())
 
   empty += bufferRegion
   dirty += bufferRegion
@@ -30,7 +30,7 @@ class ManagedBuffer(val buffer: ByteBuffer) {
     val region = empty.getSuitableRegion(bytes.length)
     if (region == null) return false
 
-    val bytesRegion = new Region(region.offset, bytes.length)
+    val bytesRegion = new Region(this, region.offset, bytes.length)
 
     buffer.position(bytesRegion.offset)
     buffer.put(bytes, 0, bytesRegion.length)
@@ -67,7 +67,7 @@ class ManagedBuffer(val buffer: ByteBuffer) {
 object ManagedBuffer {
   val ignoreDuplicates = true
 
-  case class Region(offset: Int, length: Int) {
+  case class Region(buffer: ManagedBuffer, offset: Int, length: Int) {
     def end = offset + length
 
     def touches(other: Region): Boolean = other != null && ((other.offset <= end && other.end >= offset) || (other.end >= offset && other.offset <= end))
@@ -81,7 +81,7 @@ object ManagedBuffer {
       val newOffset = if (other.offset < offset) other.offset else offset
       val newLength = (if (other.end > end) other.end else end) - newOffset
       if (newOffset == offset && newLength == length) return this
-      new Region(newOffset, newLength)
+      new Region(buffer, newOffset, newLength)
     }
 
     def -=(other: Region): Array[Region] = {
@@ -89,9 +89,9 @@ object ManagedBuffer {
       if (other contains this) return Array()
 
       var pre: Region = null
-      if (other.offset > offset) pre = new Region(offset, other.offset - offset)
+      if (other.offset > offset) pre = new Region(buffer, offset, other.offset - offset)
       var post: Region = null
-      if (other.end < end) post = new Region(other.end, end - other.end)
+      if (other.end < end) post = new Region(buffer, other.end, end - other.end)
 
       if (pre != null && post != null)
         Array(pre, post)

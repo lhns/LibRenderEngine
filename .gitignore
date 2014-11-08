@@ -27,6 +27,7 @@ bin/
 *.ipr
 *.iws
 .idea/
+projectFilesBackup/
 out/
 
 #Gradle
