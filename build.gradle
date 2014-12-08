@@ -3,13 +3,14 @@ apply plugin: 'scala'
 apply plugin: 'idea'
 apply plugin: 'eclipse'
 
-file("build.properties").withReader {
+file('build.properties').withReader {
     def prop = new Properties()
     prop.load it
     project.ext.config = new ConfigSlurper().parse prop
 }
 
 version = config.version
+group = 'org.lolhens'
 
 repositories {
     mavenCentral()
