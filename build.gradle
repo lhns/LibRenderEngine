@@ -2,6 +2,7 @@ apply plugin: 'java'
 apply plugin: 'scala'
 apply plugin: 'idea'
 apply plugin: 'eclipse'
+apply plugin: 'maven'
 
 file('build.properties').withReader {
     def prop = new Properties()
@@ -13,6 +14,7 @@ version = config.version
 group = 'org.lolhens'
 
 repositories {
+    mavenLocal()
     mavenCentral()
 }
 
@@ -34,3 +36,21 @@ dependencies {
             [group: 'org.jogamp.gluegen', name: 'gluegen-rt', version: config.version_jogamp, classifier: 'natives-macosx-universal'])
     testCompile([group: 'junit', name: 'junit', version: config.version_junit])
 }
+
+task testJar(type: Jar, dependsOn: javadoc) {
+    from sourceSets.main.output
+    from sourceSets.test.output
+    classifier = 'test'
+}
+
+task sourceJar(type: Jar) {
+    from sourceSets.main.allSource
+    classifier = 'sources'
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    from 'build/docs/javadoc'
+    classifier = 'javadoc'
+}
+
+build.dependsOn testJar, sourceJar, javadocJar
