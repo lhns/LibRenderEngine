@@ -1,17 +1,3 @@
-#General
-*.log
-
-#SBT
-.cache/
-.history/
-.lib/
-dist/*
-target/
-lib_managed/
-src_managed/
-project/boot/
-project/plugins/project/
-
 #Scala
 .scala_dependencies
 .worksheet
@@ -27,8 +13,8 @@ bin/
 *.ipr
 *.iws
 .idea/
-projectFilesBackup/
 out/
+projectFilesBackup*/
 
 #Gradle
 .gradle/
@@ -37,5 +23,17 @@ build/
 #Git
 .cache
 
-#Minecraft
+#Other
+*.log
 run/
+
+#SBT
+.cache/
+.history/
+.lib/
+dist/*
+target/
+lib_managed/
+src_managed/
+project/boot/
+project/plugins/project/
