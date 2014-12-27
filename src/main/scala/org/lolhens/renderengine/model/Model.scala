@@ -2,7 +2,7 @@ package org.lolhens.renderengine.model
 
 import java.util
 
-import org.lolhens.renderengine.util.JavaForeach._
+import scala.collection.JavaConversions._
 
 /**
  * Created by LolHens on 05.10.2014.

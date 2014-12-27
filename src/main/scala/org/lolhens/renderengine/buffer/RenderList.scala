@@ -5,9 +5,9 @@ import java.util.Random
 import javax.media.opengl.GL2
 
 import org.lolhens.renderengine.model.{Face, Model}
-import org.lolhens.renderengine.util.JavaForeach._
 import org.lolhens.renderengine.util.ToByteArray
 
+import scala.collection.JavaConversions._
 import scala.collection.mutable.ArrayBuffer
 
 /**
