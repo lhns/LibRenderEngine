@@ -14,7 +14,7 @@ class Model {
   val addedChildren = new util.LinkedList[Model]()
   val removedChildren = new util.LinkedList[Model]()
 
-  var bounds = NullBoundingBox
+  var bounds: BoundingBox = NullBoundingBox
 
   private def update(model: Model): Unit = {
     dirtyChildren.add(model)
@@ -41,7 +41,7 @@ class Model {
     }
   }
 
-  def foreach(func: Model => Unit) = {
+  def foreach(func: Model => Unit): Unit = {
     val iterator = children.iterator()
     while (iterator.hasNext) func(iterator.next)
   }

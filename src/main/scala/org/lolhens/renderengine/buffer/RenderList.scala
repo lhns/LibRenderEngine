@@ -7,14 +7,14 @@ import com.jogamp.opengl.GL2
 import org.lolhens.renderengine.model.{Face, Model}
 import org.lolhens.renderengine.util.ToByteArray
 
-import scala.collection.JavaConversions._
+import scala.collection.JavaConverters._
 import scala.collection.mutable.ArrayBuffer
 
 /**
   * Created by LolHens on 12.10.2014.
   */
 class RenderList(gl: GL2, setPointers: GL2 => Int) {
-  var bufferSize = 4 * 3 * 3 * 1000
+  var bufferSize: Int = 4 * 3 * 3 * 1000
   private val buffers = ArrayBuffer[ManagedVBO]()
   private val keys = new util.HashMap[Any, ManagedVBO]()
 
@@ -40,36 +40,36 @@ class RenderList(gl: GL2, setPointers: GL2 => Int) {
       keys.remove(key)
       if (buffer.isEmpty) {
         buffers -= buffer
-        buffer.close
+        buffer.close()
       }
       true
     } else false
   }
 
-  def render = {
-    buffers.foreach(_.render)
+  def render(): Unit = {
+    buffers.foreach(_.render())
   }
 
-  def close = buffers.foreach(_.close)
+  def close(): Unit = buffers.foreach(_.close())
 
-  def foreach(func: ManagedBuffer => Unit) = buffers.foreach(func)
+  def foreach(func: ManagedBuffer => Unit): Unit = buffers.foreach(func)
 
   def put(model: Model): Unit = {
-    if (!model.removedChildren.isEmpty) model.removedChildren.foreach(removeAll(_))
+    if (!model.removedChildren.isEmpty) model.removedChildren.asScala.foreach(removeAll)
     model.removedChildren.clear()
-    if (!model.addedChildren.isEmpty) model.addedChildren.foreach(addAll(_))
+    if (!model.addedChildren.isEmpty) model.addedChildren.asScala.foreach(addAll)
     model.addedChildren.clear()
-    if (!model.dirtyChildren.isEmpty) model.dirtyChildren.foreach(put(_))
+    if (!model.dirtyChildren.isEmpty) model.dirtyChildren.asScala.foreach(put)
     model.dirtyChildren.clear()
   }
 
   private def addAll(model: Model): Unit = model match {
     case face: Face => this += new Random().nextFloat() -> ToByteArray(Array(face._1.x, face._1.y, face._1.y, face._1.y, face._1.y, face._1.y, face._1.y, face._1.y, face._1.y))
-    case model => model.foreach(addAll(_))
+    case model => model.foreach(addAll)
   }
 
   private def removeAll(model: Model): Unit = model match {
     case face: Face => this -= face
-    case model => model.foreach(addAll(_))
+    case model => model.foreach(addAll)
   }
 }

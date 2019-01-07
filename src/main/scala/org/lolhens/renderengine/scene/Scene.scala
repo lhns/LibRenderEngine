@@ -22,19 +22,19 @@ final class Scene[Renderer <: SceneRenderer : ClassTag](drawable: GLAutoDrawable
 
   object SceneGLEventListener extends GLEventListener {
     override def init(drawable: GLAutoDrawable): Unit = sceneRenderer = implicitly[ClassTag[Renderer]].runtimeClass match {
-      case clazz if (!classOf[SceneRenderer].isAssignableFrom(clazz)) => throw new NullPointerException(s"Scene must have generic args!")
-      case clazz if (Modifier.isAbstract(clazz.getModifiers)) => throw new IllegalArgumentException(s"SceneRenderer class [${clazz.getName}] must not be abstract!")
+      case clazz if !classOf[SceneRenderer].isAssignableFrom(clazz) => throw new NullPointerException(s"Scene must have generic args!")
+      case clazz if Modifier.isAbstract(clazz.getModifiers) => throw new IllegalArgumentException(s"SceneRenderer class [${clazz.getName}] must not be abstract!")
       case clazz => clazz.getConstructor(classOf[GLAutoDrawable]).newInstance(drawable).asInstanceOf[SceneRenderer]
     }
 
     override def display(drawable: GLAutoDrawable): Unit = {
       sceneRenderer.renderList.put(model)
-      sceneRenderer.render
+      sceneRenderer.render()
     }
 
     override def reshape(drawable: GLAutoDrawable, x: Int, y: Int, width: Int, height: Int): Unit = sceneRenderer.resizeDrawable(x, y, width, height)
 
-    override def dispose(drawable: GLAutoDrawable): Unit = sceneRenderer.disposeDrawable
+    override def dispose(drawable: GLAutoDrawable): Unit = sceneRenderer.disposeDrawable()
   }
 
 }

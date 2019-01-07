@@ -1,9 +1,9 @@
 package org.lolhens.renderengine.scene
 
-import ar.com.hjg.pngj.{ImageLineInt, PngReaderInt}
+import ar.com.hjg.pngj.{IImageLine, IImageLineSet, ImageLineInt, PngReaderInt}
 import com.jogamp.opengl._
 import com.jogamp.opengl.fixedfunc.{GLLightingFunc, GLMatrixFunc}
-import com.jogamp.opengl.util.texture.TextureIO
+import com.jogamp.opengl.util.texture.{Texture, TextureIO}
 import org.lolhens.renderengine.util.ToByteArray
 
 /**
@@ -21,7 +21,8 @@ class DefaultSceneRenderer(drawable: GLAutoDrawable) extends SceneRenderer(drawa
   gl.glClearColor(0, 0, 0, 1)
 
 
-  val texture = TextureIO.newTexture(getClass.getClassLoader.getResourceAsStream("icons/pear16_32.png"), true, "png")
+  val texture: Texture =
+    TextureIO.newTexture(getClass.getClassLoader.getResourceAsStream("icons/pear16_32.png"), true, "png")
   texture.setTexParameteri(gl, GL2ES3.GL_TEXTURE_MAX_LEVEL, 7)
   texture.setTexParameteri(gl, GL.GL_TEXTURE_MIN_FILTER, GL.GL_NEAREST_MIPMAP_LINEAR)
   texture.setTexParameteri(gl, GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR)
@@ -31,11 +32,11 @@ class DefaultSceneRenderer(drawable: GLAutoDrawable) extends SceneRenderer(drawa
   texture.updateImage(gl, TextureIO.newTextureData(gl.getGLProfile, getClass.getClassLoader.getResourceAsStream("icons/pear16_32.png"), true, "png"))
 
   val reader = new PngReaderInt(getClass.getClassLoader.getResourceAsStream("icons/pear16_32.png"))
-  val imgLineSet = reader.readRows()
+  val imgLineSet: IImageLineSet[_ <: IImageLine] = reader.readRows()
   for (line <- 0 until imgLineSet.size()) imgLineSet.getImageLine(line).asInstanceOf[ImageLineInt].getScanline
 
   val off = 0
-  val data = Array[Float](
+  val data: Array[Float] = Array[Float](
     0 + off, 1 + off, 0 + off, 0, 0, 1, /**/ 1, 1, 1, 1, /**/ 0, 1,
     1 + off, 0 + off, 0 + off, 0, 0, 1, /**/ 1, 1, 1, 1, /**/ 1, 0,
     0 + off, 0 + off, 0 + off, 0, 0, 1, /**/ 1, 1, 1, 1, /**/ 0, 0,
@@ -48,13 +49,13 @@ class DefaultSceneRenderer(drawable: GLAutoDrawable) extends SceneRenderer(drawa
 
   var rot = 0f
 
-  override def render = {
+  override def render(): Unit = {
     gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT)
-    gl.glLoadIdentity
+    gl.glLoadIdentity()
     gl.glTranslatef(-0.5f, -0.5f, -3f)
     rot += 0.6f
     gl.glRotatef(rot, 1, 1, 0)
-    renderList.render
+    renderList.render()
   }
 
   override def setVBOPointers(gl: GL2): Int = {

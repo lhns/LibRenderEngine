@@ -16,7 +16,7 @@ class ManagedBuffer(val buffer: ByteBuffer) {
   private val mapped = new util.HashMap[Any, Region]()
   private val empty = new RegionList()
   private val dirty = new RegionList()
-  val bufferRegion = new Region(this, 0, buffer.capacity())
+  val bufferRegion = Region(this, 0, buffer.capacity())
 
   empty += bufferRegion
   dirty += bufferRegion
@@ -30,7 +30,7 @@ class ManagedBuffer(val buffer: ByteBuffer) {
     val region = empty.getSuitableRegion(bytes.length)
     if (region == null) return false
 
-    val bytesRegion = new Region(this, region.offset, bytes.length)
+    val bytesRegion = Region(this, region.offset, bytes.length)
 
     buffer.position(bytesRegion.offset)
     buffer.put(bytes, 0, bytesRegion.length)
@@ -58,9 +58,9 @@ class ManagedBuffer(val buffer: ByteBuffer) {
 
   def isEmpty: Boolean = empty.getFirstRegion == bufferRegion
 
-  def foreach(func: Region => Unit) = {
+  def foreach(func: Region => Unit): Unit = {
     dirty.foreach(func)
-    dirty.remove
+    dirty.remove()
   }
 }
 
@@ -68,7 +68,7 @@ object ManagedBuffer {
   val ignoreDuplicates = true
 
   case class Region(buffer: ManagedBuffer, offset: Int, length: Int) {
-    def end = offset + length
+    def end: Int = offset + length
 
     def touches(other: Region): Boolean = other != null && ((other.offset <= end && other.end >= offset) || (other.end >= offset && other.offset <= end))
 
@@ -81,7 +81,7 @@ object ManagedBuffer {
       val newOffset = if (other.offset < offset) other.offset else offset
       val newLength = (if (other.end > end) other.end else end) - newOffset
       if (newOffset == offset && newLength == length) return this
-      new Region(buffer, newOffset, newLength)
+      Region(buffer, newOffset, newLength)
     }
 
     def -=(other: Region): Array[Region] = {
@@ -89,9 +89,9 @@ object ManagedBuffer {
       if (other contains this) return Array()
 
       var pre: Region = null
-      if (other.offset > offset) pre = new Region(buffer, offset, other.offset - offset)
+      if (other.offset > offset) pre = Region(buffer, offset, other.offset - offset)
       var post: Region = null
-      if (other.end < end) post = new Region(buffer, other.end, end - other.end)
+      if (other.end < end) post = Region(buffer, other.end, end - other.end)
 
       if (pre != null && post != null)
         Array(pre, post)
@@ -118,13 +118,13 @@ object ManagedBuffer {
             var merged = newRegion += current
             if (merged != null) {
               newRegion = merged
-              iterator.remove
+              iterator.remove()
             }
             merged = newRegion += last
             if (merged != null) {
               newRegion = merged
               iterator.previous
-              iterator.remove
+              iterator.remove()
             }
             iterator.add(newRegion)
             return
@@ -134,7 +134,7 @@ object ManagedBuffer {
         val merged = region += list.getLast
         if (merged != null) {
           newRegion = merged
-          list.removeLast
+          list.removeLast()
         }
         list.add(newRegion)
       }
@@ -146,7 +146,7 @@ object ManagedBuffer {
         val current = iterator.next
         if (current intersects region) {
           iterator.previous
-          iterator.remove
+          iterator.remove()
           for (region <- current -= region) iterator.add(region)
         }
       }
@@ -167,18 +167,18 @@ object ManagedBuffer {
 
     private var foreachIterator: util.Iterator[Region] = null
 
-    def foreach(func: Region => Unit) = {
+    def foreach(func: Region => Unit): Unit = {
       val iterator = list.iterator
       foreachIterator = iterator
       while (iterator.hasNext) func(iterator.next)
       foreachIterator = null
     }
 
-    private[ManagedBuffer] def remove = if (foreachIterator != null) foreachIterator.remove
+    private[ManagedBuffer] def remove(): Unit = if (foreachIterator != null) foreachIterator.remove()
 
     private[ManagedBuffer] def getFirstRegion = if (list.size > 0) list.getFirst else null
 
-    override def toString = {
+    override def toString: String = {
       var string = ""
       val iterator = list.iterator()
       while (iterator.hasNext) {

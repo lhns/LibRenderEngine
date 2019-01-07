@@ -10,7 +10,7 @@ import com.jogamp.opengl.{GL, GL2, GL2ES3, GL2GL3}
 class Texture(gl: GL2) {
   private var timesBound = 0
 
-  val textureId = gen
+  val textureId: Int = gen
   allocate(1, 1, GL2GL3.GL_RGB12, GL.GL_UNSIGNED_BYTE, null)
 
   private def gen: Int = {
@@ -20,25 +20,25 @@ class Texture(gl: GL2) {
     textureIds(0)
   }
 
-  def allocate(width: Int, height: Int, format: Int, tpe: Int, buffer: Buffer) = {
-    bind
+  def allocate(width: Int, height: Int, format: Int, tpe: Int, buffer: Buffer): Unit = {
+    bind()
     gl.glTexImage2D(GL.GL_TEXTURE_2D, 0, GL.GL_RGBA, width, height, 0, format, tpe, buffer)
-    unbind
+    unbind()
   }
 
 
-  def put(xOff: Int, yOff: Int, width: Int, height: Int, format: Int, tpe: Int, buffer: Buffer) = {
-    bind
+  def put(xOff: Int, yOff: Int, width: Int, height: Int, format: Int, tpe: Int, buffer: Buffer): Unit = {
+    bind()
     gl.glTexSubImage2D(GL.GL_TEXTURE_2D, 0, xOff, yOff, width, height, format, tpe, buffer)
-    unbind
+    unbind()
   }
 
-  def bind: Unit = {
+  def bind(): Unit = {
     timesBound += 1
     if (timesBound == 1) gl.glBindTexture(GL.GL_TEXTURE_2D, textureId)
   }
 
-  def unbind: Unit = {
+  def unbind(): Unit = {
     timesBound -= 1
     if (timesBound == 0) gl.glBindTexture(GL.GL_TEXTURE_2D, 0)
   }
@@ -47,7 +47,7 @@ class Texture(gl: GL2) {
 object Texture {
   private var enabled = false
 
-  def setup(gl: GL2) = {
+  def setup(gl: GL2): Unit = {
     if (!enabled) {
       gl.glTexParameteri(GL.GL_TEXTURE_2D, GL2ES3.GL_TEXTURE_MAX_LEVEL, 7)
       gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MIN_FILTER, GL.GL_NEAREST_MIPMAP_LINEAR)

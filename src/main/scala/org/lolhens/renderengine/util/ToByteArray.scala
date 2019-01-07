@@ -18,7 +18,7 @@ object ToByteArray {
       case _: Float => 4
     }
     val byteArray = new Array[Byte](values.length * valueSize)
-    for (i <- 0 until values.length) {
+    for (i <- values.indices) {
       values(i) match {
         case value: Float => tmpBuffer.putFloat(0, value)
       }
