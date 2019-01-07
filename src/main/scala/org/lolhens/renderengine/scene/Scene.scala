@@ -1,16 +1,16 @@
 package org.lolhens.renderengine.scene
 
 import java.lang.reflect.Modifier
-import javax.media.opengl._
 
+import com.jogamp.opengl._
 import com.jogamp.opengl.util.FPSAnimator
 import org.lolhens.renderengine.model.Model
 
 import scala.reflect.ClassTag
 
 /**
- * Created by LolHens on 16.10.2014.
- */
+  * Created by LolHens on 16.10.2014.
+  */
 final class Scene[Renderer <: SceneRenderer : ClassTag](drawable: GLAutoDrawable) {
   drawable.addGLEventListener(SceneGLEventListener)
 

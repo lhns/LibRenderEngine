@@ -2,8 +2,8 @@ package org.lolhens.renderengine.buffer
 
 import java.util
 import java.util.Random
-import javax.media.opengl.GL2
 
+import com.jogamp.opengl.GL2
 import org.lolhens.renderengine.model.{Face, Model}
 import org.lolhens.renderengine.util.ToByteArray
 
@@ -11,9 +11,9 @@ import scala.collection.JavaConversions._
 import scala.collection.mutable.ArrayBuffer
 
 /**
- * Created by LolHens on 12.10.2014.
- */
-class RenderList(gl: GL2, setPointers: (GL2) => Int) {
+  * Created by LolHens on 12.10.2014.
+  */
+class RenderList(gl: GL2, setPointers: GL2 => Int) {
   var bufferSize = 4 * 3 * 3 * 1000
   private val buffers = ArrayBuffer[ManagedVBO]()
   private val keys = new util.HashMap[Any, ManagedVBO]()

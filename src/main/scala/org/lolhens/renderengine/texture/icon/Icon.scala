@@ -1,12 +1,11 @@
 package org.lolhens.renderengine.texture.icon
 
-import javax.media.opengl.GL
-
+import com.jogamp.opengl.GL
 import com.jogamp.opengl.util.texture.Texture
 
 /**
- * Created by LolHens on 21.10.2014.
- */
+  * Created by LolHens on 21.10.2014.
+  */
 class Icon(texture: Texture,
            private val argMinU: Float,
            private val argMinV: Float,

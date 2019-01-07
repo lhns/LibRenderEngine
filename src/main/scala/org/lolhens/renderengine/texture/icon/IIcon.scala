@@ -1,10 +1,10 @@
 package org.lolhens.renderengine.texture.icon
 
-import javax.media.opengl.GL
+import com.jogamp.opengl.GL
 
 /**
- * Created by LolHens on 21.10.2014.
- */
+  * Created by LolHens on 21.10.2014.
+  */
 trait IIcon {
   def minU: Float
 

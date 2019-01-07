@@ -2,7 +2,7 @@ package org.lolhens.renderengine.test
 
 import java.awt.BorderLayout
 import java.awt.event.{WindowAdapter, WindowEvent}
-import javax.media.opengl.awt.GLCanvas
+import com.jogamp.opengl.awt.GLCanvas
 import javax.swing.JFrame
 
 import org.lolhens.renderengine.model.Model

@@ -1,8 +1,8 @@
 package org.lolhens.renderengine.util
 
 /**
- * Created by LolHens on 15.10.2014.
- */
+  * Created by LolHens on 15.10.2014.
+  */
 object NullByteArray {
   private var nullByteArray = new Array[Byte](0)
 

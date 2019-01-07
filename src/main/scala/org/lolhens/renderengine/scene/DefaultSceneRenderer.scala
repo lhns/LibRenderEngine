@@ -1,15 +1,14 @@
 package org.lolhens.renderengine.scene
 
-import javax.media.opengl._
-import javax.media.opengl.fixedfunc.{GLLightingFunc, GLMatrixFunc}
-
 import ar.com.hjg.pngj.{ImageLineInt, PngReaderInt}
+import com.jogamp.opengl._
+import com.jogamp.opengl.fixedfunc.{GLLightingFunc, GLMatrixFunc}
 import com.jogamp.opengl.util.texture.TextureIO
 import org.lolhens.renderengine.util.ToByteArray
 
 /**
- * Created by LolHens on 16.10.2014.
- */
+  * Created by LolHens on 16.10.2014.
+  */
 class DefaultSceneRenderer(drawable: GLAutoDrawable) extends SceneRenderer(drawable) {
   gl.glEnable(GL.GL_DEPTH_TEST)
   gl.glDepthFunc(GL.GL_LEQUAL)

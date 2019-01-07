@@ -5,8 +5,8 @@ import java.util
 import scala.collection.JavaConversions._
 
 /**
- * Created by LolHens on 05.10.2014.
- */
+  * Created by LolHens on 05.10.2014.
+  */
 class Model {
   private val parents = new util.ArrayList[Model]()
   private val children = new util.ArrayList[Model]()

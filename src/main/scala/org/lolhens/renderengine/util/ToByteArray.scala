@@ -4,8 +4,8 @@ import java.nio.{ByteBuffer, ByteOrder}
 
 
 /**
- * Created by LolHens on 16.10.2014.
- */
+  * Created by LolHens on 16.10.2014.
+  */
 object ToByteArray {
   //NOT THREAD SAFE!!!
   private val tmpBuffer = ByteBuffer.allocateDirect(8).order(ByteOrder.nativeOrder())

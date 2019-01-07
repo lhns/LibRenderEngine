@@ -8,8 +8,8 @@ import org.lolhens.renderengine.util.NullByteArray
 
 
 /**
- * Created by LolHens on 05.10.2014.
- */
+  * Created by LolHens on 05.10.2014.
+  */
 class ManagedBuffer(val buffer: ByteBuffer) {
   def this(size: Int) = this(ByteBuffer.allocateDirect(size).order(ByteOrder.nativeOrder()))
 

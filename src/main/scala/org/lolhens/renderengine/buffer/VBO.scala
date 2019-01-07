@@ -1,12 +1,13 @@
 package org.lolhens.renderengine.buffer
 
 import java.nio.Buffer
-import javax.media.opengl.fixedfunc.GLPointerFunc
-import javax.media.opengl.{GL, GL2}
+
+import com.jogamp.opengl.fixedfunc.GLPointerFunc
+import com.jogamp.opengl.{GL, GL2}
 
 /**
- * Created by LolHens on 15.10.2014.
- */
+  * Created by LolHens on 15.10.2014.
+  */
 class VBO(gl: GL2, size: Int, setPointers: (GL2) => Int) {
   private var timesBound = 0
 

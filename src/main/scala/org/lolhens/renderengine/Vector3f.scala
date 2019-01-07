@@ -1,8 +1,8 @@
 package org.lolhens.renderengine
 
 /**
- * Created by LolHens on 05.10.2014.
- */
+  * Created by LolHens on 05.10.2014.
+  */
 case class Vector3f(val x: Float, val y: Float, val z: Float) {
   def +(vec: Vector3f): Vector3f = new Vector3f(x + vec.x, y + vec.y, z + vec.z)
 

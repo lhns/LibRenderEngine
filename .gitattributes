@@ -4,7 +4,6 @@
 *.groovy text eol=lf
 *.scala text eol=lf
 *.sh text eol=lf
-*.bat text eol=crlf
 *.md text
 *.properties text
 
@@ -18,3 +17,4 @@
 *.jar binary
 *.7z binary
 *.db binary
+*.bat binary

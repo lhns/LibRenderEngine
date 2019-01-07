@@ -1,13 +1,12 @@
 package org.lolhens.renderengine.scene
 
-import javax.media.opengl.glu.GLU
-import javax.media.opengl.{GL2, GLAutoDrawable}
-
+import com.jogamp.opengl.glu.GLU
+import com.jogamp.opengl.{GL2, GLAutoDrawable}
 import org.lolhens.renderengine.buffer.RenderList
 
 /**
- * Created by LolHens on 16.10.2014.
- */
+  * Created by LolHens on 16.10.2014.
+  */
 abstract class SceneRenderer(drawable: GLAutoDrawable) {
   val gl = drawable.getGL.getGL2
   val glu = new GLU()

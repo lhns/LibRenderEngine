@@ -1,16 +1,17 @@
 package org.lolhens.renderengine.texture
 
 import java.nio.Buffer
-import javax.media.opengl.{GL, GL2, GL2ES3, GL2GL3}
+
+import com.jogamp.opengl.{GL, GL2, GL2ES3, GL2GL3}
 
 /**
- * Created by LolHens on 21.10.2014.
- */
+  * Created by LolHens on 21.10.2014.
+  */
 class Texture(gl: GL2) {
   private var timesBound = 0
 
   val textureId = gen
-  allocate(1, 1, GL2GL3.GL_BGR, GL.GL_UNSIGNED_BYTE, null)
+  allocate(1, 1, GL2GL3.GL_RGB12, GL.GL_UNSIGNED_BYTE, null)
 
   private def gen: Int = {
     //val pngReaderByte = new PngReaderByte()
@@ -21,7 +22,7 @@ class Texture(gl: GL2) {
 
   def allocate(width: Int, height: Int, format: Int, tpe: Int, buffer: Buffer) = {
     bind
-    gl.glTexImage2D(GL.GL_TEXTURE_2D, 0, GL.GL_RGBA, width, height, 0, format, tpe, buffer);
+    gl.glTexImage2D(GL.GL_TEXTURE_2D, 0, GL.GL_RGBA, width, height, 0, format, tpe, buffer)
     unbind
   }
 
