@@ -29,6 +29,11 @@ case class Vector3f private(x: Float,
   def *(vec: Vector3f): Vector3f = if (isOne) vec else this * (vec.x, vec.y, vec.z)
   def /(vec: Vector3f): Vector3f = this / (vec.x, vec.y, vec.z)
 
+  def +(value: Float): Vector3f = this + (value, value, value)
+  def -(value: Float): Vector3f = this - (value, value, value)
+  def *(value: Float): Vector3f = this * (value, value, value)
+  def /(value: Float): Vector3f = this / (value, value, value)
+
   def max(vec: Vector3f): Vector3f = Vector3f(
     if (vec.x > x) vec.x else x,
     if (vec.y > y) vec.y else y,
