@@ -1,4 +1,4 @@
-package org.lolhens.renderengine
+package org.lolhens.renderengine.vector
 
 abstract class Vector3[@specialized(Int, Long, Float, Double) T] protected(val x: T,
                                                                            val y: T,

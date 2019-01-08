@@ -1,6 +1,6 @@
 package org.lolhens.renderengine.model
 
-import org.lolhens.renderengine.Vector3f
+import org.lolhens.renderengine.vector.Vector3f
 
 /**
   * Created by LolHens on 05.10.2014.

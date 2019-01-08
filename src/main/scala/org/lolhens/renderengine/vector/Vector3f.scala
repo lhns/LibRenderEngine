@@ -1,4 +1,4 @@
-package org.lolhens.renderengine
+package org.lolhens.renderengine.vector
 
 final case class Vector3f private(override val x: Float,
                                   override val y: Float,
@@ -32,7 +32,7 @@ final case class Vector3f private(override val x: Float,
   )
 }
 
-object Vector3i {
+object Vector3f {
   val Zero = new Vector3f(0, 0, 0)
   val One = new Vector3f(1, 1, 1)
 
