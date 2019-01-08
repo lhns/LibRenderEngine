@@ -17,6 +17,9 @@ final case class Vector2f private(override val x: Float,
   override def -(x: Float, y: Float): Vector2f = if (x == 0 && y == 0) this else Vector2f(this.x - x, this.y - y)
   override def *(x: Float, y: Float): Vector2f = if (x == 1 && y == 1) this else Vector2f(this.x * x, this.y * y)
   override def /(x: Float, y: Float): Vector2f = if (x == 1 && y == 1) this else Vector2f(this.x / x, this.y / y)
+
+  override def `length²`: Float = x * x + y * y
+  override def length: Float = Math.sqrt(`length²`).toFloat
 }
 
 object Vector2f {

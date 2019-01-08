@@ -18,6 +18,9 @@ final case class Vector3l private(override val x: Long,
   override def -(x: Long, y: Long, z: Long): Vector3l = if (x == 0 && y == 0 && z == 0) this else Vector3l(this.x - x, this.y - y, this.z - z)
   override def *(x: Long, y: Long, z: Long): Vector3l = if (x == 1 && y == 1 && z == 1) this else Vector3l(this.x * x, this.y * y, this.z * z)
   override def /(x: Long, y: Long, z: Long): Vector3l = if (x == 1 && y == 1 && z == 1) this else Vector3l(this.x / x, this.y / y, this.z / z)
+
+  override def `length²`: Long = x * x + y * y + z * z
+  override def length: Long = Math.sqrt(`length²`).toLong
 }
 
 object Vector3l {

@@ -31,4 +31,8 @@ abstract class Vector2[@specialized(Int, Long, Float, Double) T] protected(val x
   def -(value: T): Self = this - (value, value)
   def *(value: T): Self = this * (value, value)
   def /(value: T): Self = this / (value, value)
+
+  def `length²`: T
+  def length: T
+  def normalized: Self = this / length
 }

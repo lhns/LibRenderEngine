@@ -17,6 +17,9 @@ final case class Vector2d private(override val x: Double,
   override def -(x: Double, y: Double): Vector2d = if (x == 0 && y == 0) this else Vector2d(this.x - x, this.y - y)
   override def *(x: Double, y: Double): Vector2d = if (x == 1 && y == 1) this else Vector2d(this.x * x, this.y * y)
   override def /(x: Double, y: Double): Vector2d = if (x == 1 && y == 1) this else Vector2d(this.x / x, this.y / y)
+
+  override def `length²`: Double = x * x + y * y
+  override def length: Double = Math.sqrt(`length²`)
 }
 
 object Vector2d {

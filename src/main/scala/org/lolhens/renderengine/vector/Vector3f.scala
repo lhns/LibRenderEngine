@@ -19,6 +19,9 @@ final case class Vector3f private(override val x: Float,
   override def *(x: Float, y: Float, z: Float): Vector3f = if (x == 1 && y == 1 && z == 1) this else Vector3f(this.x * x, this.y * y, this.z * z)
   override def /(x: Float, y: Float, z: Float): Vector3f = if (x == 1 && y == 1 && z == 1) this else Vector3f(this.x / x, this.y / y, this.z / z)
 
+  override def `length²`: Float = x * x + y * y + z * z
+  override def length: Float = Math.sqrt(`length²`).toFloat
+
   def max(vec: Vector3f): Vector3f = this.Vector3(
     if (vec.x > x) vec.x else x,
     if (vec.y > y) vec.y else y,

@@ -18,6 +18,9 @@ final case class Vector3d private(override val x: Double,
   override def -(x: Double, y: Double, z: Double): Vector3d = if (x == 0 && y == 0 && z == 0) this else Vector3d(this.x - x, this.y - y, this.z - z)
   override def *(x: Double, y: Double, z: Double): Vector3d = if (x == 1 && y == 1 && z == 1) this else Vector3d(this.x * x, this.y * y, this.z * z)
   override def /(x: Double, y: Double, z: Double): Vector3d = if (x == 1 && y == 1 && z == 1) this else Vector3d(this.x / x, this.y / y, this.z / z)
+
+  override def `length²`: Double = x * x + y * y + z * z
+  override def length: Double = Math.sqrt(`length²`)
 }
 
 object Vector3d {

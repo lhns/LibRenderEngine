@@ -18,6 +18,9 @@ final case class Vector3i private(override val x: Int,
   override def -(x: Int, y: Int, z: Int): Vector3i = if (x == 0 && y == 0 && z == 0) this else Vector3i(this.x - x, this.y - y, this.z - z)
   override def *(x: Int, y: Int, z: Int): Vector3i = if (x == 1 && y == 1 && z == 1) this else Vector3i(this.x * x, this.y * y, this.z * z)
   override def /(x: Int, y: Int, z: Int): Vector3i = if (x == 1 && y == 1 && z == 1) this else Vector3i(this.x / x, this.y / y, this.z / z)
+
+  override def `length²`: Int = x * x + y * y + z * z
+  override def length: Int = Math.sqrt(`length²`).toInt
 }
 
 object Vector3i {
