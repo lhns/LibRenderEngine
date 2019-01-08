@@ -7,24 +7,30 @@ import java.nio.{ByteBuffer, ByteOrder}
   * Created by LolHens on 16.10.2014.
   */
 object ToByteArray {
-  //NOT THREAD SAFE!!!
-  private val tmpBuffer = ByteBuffer.allocateDirect(8).order(ByteOrder.nativeOrder())
+  private val localBuffer: ThreadLocal[ByteBuffer] = ThreadLocal.withInitial { () =>
+    ByteBuffer.allocateDirect(8).order(ByteOrder.nativeOrder())
+  }
 
   def apply[T <: AnyVal](values: Array[T]): Array[Byte] = {
-    if (values == null || values.length == 0) return new Array[Byte](0)
-
-    val valueSize = values(0) match {
-      case _: Byte => return values.asInstanceOf[Array[Byte]]
-      case _: Float => 4
-    }
-    val byteArray = new Array[Byte](values.length * valueSize)
-    for (i <- values.indices) {
-      values(i) match {
-        case value: Float => tmpBuffer.putFloat(0, value)
+    if (values == null || values.length == 0) new Array[Byte](0)
+    else if (values(0).isInstanceOf[Byte]) values.asInstanceOf[Array[Byte]]
+    else {
+      val valueSize = values(0) match {
+        case _: Float => 4
       }
-      tmpBuffer.rewind
-      tmpBuffer.get(byteArray, i * valueSize, valueSize)
+
+      val byteArray = new Array[Byte](values.length * valueSize)
+      val buffer = localBuffer.get()
+
+      for (i <- values.indices) {
+        values(i) match {
+          case value: Float => buffer.putFloat(0, value)
+        }
+        buffer.rewind
+        buffer.get(byteArray, i * valueSize, valueSize)
+      }
+
+      byteArray
     }
-    byteArray
   }
 }

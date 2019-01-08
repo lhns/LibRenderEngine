@@ -47,7 +47,8 @@ class ManagedBuffer(val buffer: ByteBuffer) {
     if (region == null) return false
 
     buffer.position(region.offset)
-    buffer.put(NullByteArray(region.length), 0, region.length)
+    for (_ <- 0 until region.length)
+      buffer.put(0.toByte)
 
     mapped.remove(key)
     empty += region
