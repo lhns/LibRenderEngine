@@ -4,7 +4,6 @@ import java.nio.{ByteBuffer, ByteOrder}
 import java.util
 
 import org.lolhens.renderengine.buffer.ManagedBuffer._
-import org.lolhens.renderengine.util.NullByteArray
 
 
 /**

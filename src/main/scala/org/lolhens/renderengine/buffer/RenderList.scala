@@ -4,8 +4,7 @@ import java.util
 import java.util.Random
 
 import com.jogamp.opengl.GL2
-import org.lolhens.renderengine.model.{Face, Model}
-import org.lolhens.renderengine.util.ToByteArray
+import org.lolhens.renderengine.model.{Model, Triangle}
 
 import scala.collection.JavaConverters._
 import scala.collection.mutable.ArrayBuffer
@@ -64,12 +63,12 @@ class RenderList(gl: GL2, setPointers: GL2 => Int) {
   }
 
   private def addAll(model: Model): Unit = model match {
-    case face: Face => this += new Random().nextFloat() -> ToByteArray(Array(face._1.x, face._1.y, face._1.y, face._1.y, face._1.y, face._1.y, face._1.y, face._1.y, face._1.y))
+    case triangle: Triangle => this += new Random().nextFloat() -> triangle.toByteVector.toArray
     case model => model.foreach(addAll)
   }
 
   private def removeAll(model: Model): Unit = model match {
-    case face: Face => this -= face
+    case triangle: Triangle => this -= triangle
     case model => model.foreach(addAll)
   }
 }

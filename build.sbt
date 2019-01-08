@@ -44,6 +44,7 @@ lazy val renderengine = project.in(file("."))
     version := "0.0.0",
 
     libraryDependencies ++= Seq(
+      "org.scodec" %% "scodec-bits" % "1.1.6",
       "org.jogamp.jogl" % "jogl-all" % "2.3.2",
       "org.jogamp.jogl" % "jogl-all" % "2.3.2" classifier "natives-windows-amd64",
       "org.jogamp.jogl" % "jogl-all" % "2.3.2" classifier "natives-windows-i586",
